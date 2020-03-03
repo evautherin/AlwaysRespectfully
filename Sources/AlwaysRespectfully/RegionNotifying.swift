@@ -13,12 +13,12 @@ import UserNotifications
 
 
 extension AlwaysRespectfully {
-    func setNotifications(
+    func setNotifications<Predicate>(
         _ diffing: Diffing,
         predicates: Set<Predicate>
-    ) -> AnyPublisher<Void, Error> {
+    ) -> AnyPublisher<Void, Error> where Predicate: PositionPredicate, Predicate: Hashable {
         
-        Empty<Void, Error>().setFailureType(Error.self).eraseToAnyPublisher()
+        Empty<Void, Error>().eraseToAnyPublisher()
     }
 
 }

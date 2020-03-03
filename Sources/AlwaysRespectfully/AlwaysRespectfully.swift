@@ -16,6 +16,12 @@ import AnyLogger
 struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore> {
     let regions: R
     let notifications: N
+    
+    enum Diffing {
+        case set
+        case update
+    }
+
 
     func privateMonitor<Predicate>(
         _ diffing: Diffing,
@@ -24,11 +30,11 @@ struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore> {
         
         func adjustNotifcationMasking(predicate: Predicate, direction: Direction) {
             log.debug("adjustNotifcationMasking \(direction.description) \(predicate.description)")
-            let identifiers = Set([predicate.id])
+            let identifiers = [predicate.id]
             
             switch direction {
-            case .identical: notifications.addMaskedIdentiers(identifiers)
-            case .opposite: notifications.removeMaskedIdentiers(identifiers)
+            case .identical: notifications.mask(predicateIdentifiers: identifiers)
+            case .opposite: notifications.unmask(predicateIdentifiers: identifiers)
             }
         }
         

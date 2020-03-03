@@ -98,13 +98,15 @@ public enum Activation {
 }
 
 
-public protocol PositionPredicate {
+public protocol PositionPredicate: Identifiable {
     associatedtype L: Location, Hashable
     
     var position: Position { get }
     var region: Region<L> { get }
     
     var activation: Activation { get }
+    
+    var id: String { get }
 }
 
 public struct AnyPositionPredicate: PositionPredicate, Hashable {

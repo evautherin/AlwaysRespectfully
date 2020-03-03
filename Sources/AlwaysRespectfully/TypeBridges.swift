@@ -11,6 +11,11 @@ import CoreLocation
 import UserNotifications
 
 
+public struct AlwaysRespectful {
+    static let identifier = "AlwaysRespectful"
+}
+
+
 extension Location {
     public var description: String {
         switch designation {
@@ -242,7 +247,7 @@ extension PositionPredicate {
 //    }
 }
 
-extension PositionPredicate: Identifiable {
+extension PositionPredicate {
     public var id: String {
         description
     }

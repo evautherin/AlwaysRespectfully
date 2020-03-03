@@ -6,12 +6,15 @@
 //  Copyright © 2020 Etienne Vautherin. All rights reserved.
 //
 
+import Combine
 
-protocol RegionStore {
-    associatedtype NativeRegion: Region
 
-    public var storedRegions: Set<NativeRegion> { get }
+public protocol RegionStore {
+    associatedtype L: Location, Hashable
+    associatedtype NativeRegion: Hashable
+
+    var storedRegions: Set<NativeRegion> { get }
     
-    public func add(regions: Set<NativeRegion>) -> AnyPublisher<Void, Error>
-    public func remove(regions: Set<NativeRegion>)
+    func add(regions: Set<NativeRegion>) -> AnyPublisher<Void, Error>
+    func remove(regions: Set<NativeRegion>)
 }

@@ -66,7 +66,7 @@ extension AlwaysRespectfully {
         _ diffing: Diffing,
         predicates: Set<Predicate>
     ) -> AnyPublisher<(Predicate, Direction), Error> where Predicate: PositionPredicate, Predicate: Hashable {
-        Empty<(Predicate, Direction)>().setFailureType(Error.self).eraseToAnyPublisher()
+        Empty<(Predicate, Direction), Error>().eraseToAnyPublisher()
     }
 }
 

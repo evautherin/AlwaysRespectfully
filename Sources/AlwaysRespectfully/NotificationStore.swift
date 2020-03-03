@@ -6,13 +6,16 @@
 //  Copyright © 2020 Etienne Vautherin. All rights reserved.
 //
 
-protocol PositionPredicateStore {
-    associatedtype NativePredicate: PositionPredicate, Identifiable
+import Combine
+
+
+public protocol PositionPredicateStore {
+    associatedtype NativePredicate: PositionPredicate, Hashable
     
-    public var storedPredicates: Future<Set<NativePredicate>, Never> { get }
+    var storedPredicates: Future<Set<NativePredicate>, Never> { get }
     
-    public func add(predicates: Set<NativePredicate>) -> AnyPublisher<Void, Error>
-    public func remove(predicateIdentifiers: [String])
-    public func mask(predicateIdentifiers: [String])
-    public func unmask(predicateIdentifiers: [String])
+    func add(predicates: Set<NativePredicate>) -> AnyPublisher<Void, Error>
+    func remove(predicateIdentifiers: [String])
+    func mask(predicateIdentifiers: [String])
+    func unmask(predicateIdentifiers: [String])
 }
