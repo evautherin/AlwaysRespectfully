@@ -17,8 +17,37 @@ extension AlwaysRespectfully {
         _ diffing: Diffing,
         predicates: Set<Predicate>
     ) -> AnyPublisher<Void, Error> where Predicate: PositionPredicate, Predicate: Hashable {
-        
-        Empty<Void, Error>().eraseToAnyPublisher()
+
+        func predicatesDifference(
+            _ diffing: Diffing,
+            predicates: Set<Predicate>
+        ) -> AnyPublisher<(added: [Predicate], removed: [N.NativePredicate]), Never> {
+            
+            func requestsDifference(
+                nativePredicates: Set<N.NativePredicate>
+            ) -> (added: [Predicate], removed: [N.NativePredicate]) {
+
+                let removed = nativePredicates.subtracting(notifications, predicates: predicates)
+                switch diffing {
+                    
+                    case .set: return (
+                        added: Array(predicates),
+                        removed: removed
+                    )
+                    
+                    case .update: return (
+                        added: predicates.subtracting(notifications, nativePredicates: nativePredicates),
+                        removed: removed
+                    )
+                }
+            }
+
+            return notifications.storedPredicates
+                .map(requestsDifference)
+                .eraseToAnyPublisher()
+        }
+
+        return Empty<Void, Error>().eraseToAnyPublisher()
     }
 
 }

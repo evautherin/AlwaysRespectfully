@@ -13,7 +13,9 @@ import UserNotifications
 import AnyLogger
 
 
-struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore> {
+struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore>
+    where N.NativePredicate: PredicateEquatable {
+    
     let regions: R
     let notifications: N
     
