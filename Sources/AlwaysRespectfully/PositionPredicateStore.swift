@@ -32,7 +32,7 @@ public protocol PositionPredicateStore {
 }
 
 
-public protocol PredicateEquatable {
+protocol PredicateEquatable {
     func isEqual<Predicate>(to: Predicate) -> Bool where Predicate: PositionPredicate
 }
 

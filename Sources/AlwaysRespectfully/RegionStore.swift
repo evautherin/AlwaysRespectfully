@@ -20,7 +20,7 @@ public protocol RegionStore {
 }
 
 
-public protocol RegionEquatable {
+protocol RegionEquatable {
     func isEqual<L>(to: Region<L>) -> Bool where L: Location
 }
 
