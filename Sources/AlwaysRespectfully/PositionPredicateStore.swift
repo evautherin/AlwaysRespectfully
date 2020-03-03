@@ -13,10 +13,19 @@ public protocol PositionPredicateStore {
     associatedtype NativePredicate: PositionPredicate, Hashable
     
     var storedPredicates: Future<Set<NativePredicate>, Never> { get }
-    var storedPredicates2: Future<LazyFilterCollection<Set<NativePredicate>>, Never> { get }
 
-    func add(predicates: Set<NativePredicate>) -> AnyPublisher<Void, Error>
-    func add2(predicates: LazyFilterCollection<Set<NativePredicate>>) -> AnyPublisher<Void, Error>
+    func add<Predicate>(predicates: [Predicate]) -> AnyPublisher<Void, Error>
+        where Predicate: PositionPredicate
+    
+//    func add(predicate: AnyPositionPredicate) -> AnyPublisher<Void, Error>? {
+//        guard let request = predicate.notificationRequest else { return .none }
+//
+//        return NotificationDelegate.add(request: request).eraseToAnyPublisher()
+//    }
+//
+//    let publishers = addPredicates.compactMap(add)
+//    return Publishers.zipMany(publishers)
+
     func remove(predicateIdentifiers: [String])
     func mask(predicateIdentifiers: [String])
     func unmask(predicateIdentifiers: [String])
