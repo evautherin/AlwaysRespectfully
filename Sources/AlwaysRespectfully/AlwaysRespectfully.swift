@@ -10,11 +10,17 @@ import Combine
 import AnyLogger
 
 
-struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore>
-    where R.NativeRegion: RegionEquatable, N.NativePredicate: PredicateEquatable {
+public struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore> {
     
-    let regions: R
-    let notifications: N
+    public let regions: R
+    public let notifications: N
+    
+    public func monitor<Predicate>(
+        predicates: Set<Predicate>
+    ) -> AnyPublisher<Predicate, Error> where Predicate: Hashable, Predicate: PositionPredicate {
+        privateMonitor(.set, predicates: predicates)
+    }
+
     
     enum Diffing {
         case set
@@ -22,10 +28,33 @@ struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore>
     }
 
 
+    enum Direction {
+        case opposite
+        case identical
+
+        init(isIdentical: Bool) {
+            self = isIdentical ? .identical : .opposite
+        }
+        
+        var isIdentical: Bool { self == .identical }
+
+        static func comparing(_ position: Position, _ otherPosition: Position) -> Direction {
+            Direction(isIdentical: position == otherPosition)
+        }
+
+        var description: String {
+            switch (self) {
+            case .opposite: return "opposite"
+            case .identical: return "identical"
+            }
+        }
+    }
+
+
     func privateMonitor<Predicate>(
         _ diffing: Diffing,
         predicates: Set<Predicate>
-    ) -> AnyPublisher<Predicate, Error> where Predicate: PositionPredicate, Predicate: Hashable {
+    ) -> AnyPublisher<Predicate, Error> where Predicate: Hashable, Predicate: PositionPredicate {
         
         func adjustNotifcationMasking(predicate: Predicate, direction: Direction) {
             log.debug("adjustNotifcationMasking \(direction.description) \(predicate.description)")
@@ -49,3 +78,10 @@ struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore>
             .logDebug(".predicates monitoring")
     }
 }
+
+
+#if DEBUG
+extension AlwaysRespectfully.Direction: CustomDebugStringConvertible {
+    var debugDescription: String { description }
+}
+#endif

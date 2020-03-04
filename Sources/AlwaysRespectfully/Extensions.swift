@@ -23,17 +23,21 @@ extension Sequence {
 
 
 extension Publishers {
-    static func zipMany(_ publishers: [AnyPublisher<(), Error>]) -> AnyPublisher<(), Error> {
+    static func zipMany<VoidPublisher>(_ publishers: [VoidPublisher]) -> AnyPublisher<(), Error>
+        where VoidPublisher: Publisher, VoidPublisher.Output == (), VoidPublisher.Failure == Error {
         
-        func zipper(zipped: AnyPublisher<(), Error>, toZip: AnyPublisher<(), Error>) -> AnyPublisher<(), Error> {
+        func zipper(zipped: AnyPublisher<(), Error>, toZip: VoidPublisher) -> AnyPublisher<(), Error> {
             Publishers.Zip(zipped, toZip)
                 .map({ _ in })
                 .eraseToAnyPublisher()
         }
         
-        let neutralElement = Just<Void>(()).setFailureType(to: Error.self).eraseToAnyPublisher()
+        let neutralElement = Just<()>(())
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+
         return publishers.reduce(neutralElement, zipper)
-        .eraseToAnyPublisher()
+            .eraseToAnyPublisher()
     }
 }
 

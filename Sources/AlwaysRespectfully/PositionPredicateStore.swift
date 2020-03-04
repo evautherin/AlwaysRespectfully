@@ -16,10 +16,10 @@ public protocol PositionPredicateStore {
 
     func add<Predicate>(predicates: [Predicate]) -> AnyPublisher<Void, Error> where Predicate: PositionPredicate
     
-//    func add(predicate: AnyPositionPredicate) -> AnyPublisher<Void, Error>? {
+//    func add(predicate: AnyPositionPredicate) -> Future<Void, Error>? {
 //        guard let request = predicate.notificationRequest else { return .none }
 //
-//        return NotificationDelegate.add(request: request).eraseToAnyPublisher()
+//        return NotificationDelegate.add(request: request) //.eraseToAnyPublisher()
 //    }
 //
 //    let publishers = addPredicates.compactMap(add)
