@@ -16,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8F7FF716240FAE44002C02B6 /* Drafts */ = {isa = PBXFileReference; lastKnownFileType = text; name = Drafts; path = "../-private/Drafts"; sourceTree = "<group>"; };
 		8FA265F3240D687E00F3C058 /* Full iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Full iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FA265F6240D687E00F3C058 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8FA265F8240D687E00F3C058 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -42,6 +43,7 @@
 		8FA265EA240D687E00F3C058 = {
 			isa = PBXGroup;
 			children = (
+				8F7FF716240FAE44002C02B6 /* Drafts */,
 				8FA2660B240D68B400F3C058 /* AlwaysRespectfully */,
 				8FA2660A240D689800F3C058 /* AlwaysRespectfulApp */,
 				8FA265F5240D687E00F3C058 /* Full iOS Example */,

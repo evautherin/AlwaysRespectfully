@@ -6,15 +6,12 @@
 //  Copyright © 2020 Etienne Vautherin. All rights reserved.
 //
 
-import Foundation
 import Combine
-import CoreLocation
-import UserNotifications
 import AnyLogger
 
 
 struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore>
-    where N.NativePredicate: PredicateEquatable {
+    where R.NativeRegion: RegionEquatable, N.NativePredicate: PredicateEquatable {
     
     let regions: R
     let notifications: N

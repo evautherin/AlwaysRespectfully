@@ -17,6 +17,10 @@ public protocol RegionStore {
     
     func add(regions: Set<NativeRegion>) -> AnyPublisher<Void, Error>
     func remove(regions: Set<NativeRegion>)
+    
+    var insideRegionPublisher: AnyPublisher<NativeRegion, Never>  { get }
+    var outsideRegionPublisher: AnyPublisher<NativeRegion, Never>  { get }
+    // Publishers.Merge(delegate.didEnterRegionSubject, delegate.insideRegionSubject)
 }
 
 

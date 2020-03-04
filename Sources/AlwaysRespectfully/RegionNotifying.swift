@@ -6,10 +6,7 @@
 //  Copyright © 2020 Etienne Vautherin. All rights reserved.
 //
 
-import Foundation
 import Combine
-import CoreLocation
-import UserNotifications
 
 
 extension AlwaysRespectfully {
@@ -18,26 +15,42 @@ extension AlwaysRespectfully {
         predicates: Set<Predicate>
     ) -> AnyPublisher<Void, Error> where Predicate: PositionPredicate, Predicate: Hashable {
 
-        func predicatesDifference(
-            _ diffing: Diffing,
-            predicates: Set<Predicate>
-        ) -> AnyPublisher<(added: [Predicate], removed: [N.NativePredicate]), Never> {
+        var predicatesDifference: AnyPublisher<(added: [Predicate], removed: [N.NativePredicate]), Never> {
             
             func nativePredicatesDifference(
                 nativePredicates: Set<N.NativePredicate>
             ) -> (added: [Predicate], removed: [N.NativePredicate]) {
 
-                let removed = nativePredicates.subtracting(notifications, predicates: predicates)
+                func notContainedByPredicates(nativePredicate: N.NativePredicate) -> Bool {
+                    func isEqual(predicate: Predicate) -> Bool {
+                        nativePredicate.isEqual(to: predicate)
+                    }
+                    return predicates.firstIndex(where: isEqual) == .none
+                }
+                
+                func notContainedByNativePredicates(predicate: Predicate) -> Bool {
+                    func isEqual(nativePredicate: N.NativePredicate) -> Bool {
+                        nativePredicate.isEqual(to: predicate)
+                    }
+                    return nativePredicates.firstIndex(where: isEqual) == .none
+                }
+
+                var predicatesSubtractingNativePredicates: [Predicate] {
+                    predicates.filter(notContainedByNativePredicates)
+                }
+
+                var nativePredicatesSubtractingPredicates: [N.NativePredicate] {
+                    nativePredicates.filter(notContainedByPredicates)
+                }
+
                 switch diffing {
-                    
                     case .set: return (
                         added: Array(predicates),
-                        removed: removed
+                        removed: nativePredicatesSubtractingPredicates
                     )
-                    
                     case .update: return (
-                        added: predicates.subtracting(notifications, nativePredicates: nativePredicates),
-                        removed: removed
+                        added: predicatesSubtractingNativePredicates,
+                        removed: nativePredicatesSubtractingPredicates
                     )
                 }
             }
@@ -49,17 +62,17 @@ extension AlwaysRespectfully {
 
         
         func applyChanges(
-            addPredicates: [Predicate],
-            removePredicates: [N.NativePredicate]
+            addedPredicates: [Predicate],
+            removedPredicates: [N.NativePredicate]
         ) -> AnyPublisher<Void, Error> {
 
-            let removeIdentifiers = removePredicates.map(\.id)
-            notifications.remove(predicateIdentifiers: removeIdentifiers)
-            return notifications.add(predicates: addPredicates)
+            let removedIdentifiers = removedPredicates.map(\.id)
+            notifications.remove(predicateIdentifiers: removedIdentifiers)
+            return notifications.add(predicates: addedPredicates)
         }
 
         
-        return predicatesDifference(diffing, predicates: predicates)
+        return predicatesDifference
             .setFailureType(to: Error.self)
             .flatMap(applyChanges)
             .eraseToAnyPublisher()
