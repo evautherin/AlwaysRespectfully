@@ -1,6 +1,6 @@
 //
-//  AlwaysRespectful.swift
-//  AlwaysRespectful
+//  AlwaysRespectfully.swift
+//  AlwaysRespectfully
 //
 //  Created by Etienne Vautherin on 03/02/2020.
 //  Copyright © 2020 Etienne Vautherin. All rights reserved.
@@ -14,6 +14,12 @@ public struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore> {
     
     public let regions: R
     public let notifications: N
+    
+    public init(regions: R, notifications: N) {
+        self.regions = regions
+        self.notifications = notifications
+    }
+
     
     public func monitor<Predicate>(
         predicates: Set<Predicate>
