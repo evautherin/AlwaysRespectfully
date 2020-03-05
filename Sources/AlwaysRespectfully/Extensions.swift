@@ -11,11 +11,11 @@ import Combine
 
 #if swift(<5.2)
 extension Sequence {
-    func map<T>(_ keyPath: KeyPath<Element, T>) -> [T] {
+    public func map<T>(_ keyPath: KeyPath<Element, T>) -> [T] {
         return map({ $0[keyPath: keyPath] })
     }
     
-    func compactMap<T>(_ keyPath: KeyPath<Element, T?>) -> [T] {
+    public func compactMap<T>(_ keyPath: KeyPath<Element, T?>) -> [T] {
         return compactMap({ $0[keyPath: keyPath] })
     }
 }
@@ -23,7 +23,7 @@ extension Sequence {
 
 
 extension Publishers {
-    static func zipMany<VoidPublisher>(_ publishers: [VoidPublisher]) -> AnyPublisher<(), Error>
+    public static func zipMany<VoidPublisher>(_ publishers: [VoidPublisher]) -> AnyPublisher<(), Error>
         where VoidPublisher: Publisher, VoidPublisher.Output == (), VoidPublisher.Failure == Error {
         
         func zipper(zipped: AnyPublisher<(), Error>, toZip: VoidPublisher) -> AnyPublisher<(), Error> {
