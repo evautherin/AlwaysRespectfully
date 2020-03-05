@@ -56,8 +56,13 @@ public enum BeaconMajorIdentifier: Hashable {
 
 
 public struct BeaconIdentifier: Hashable {
-    let uuid: UUID
-    let major: BeaconMajorIdentifier
+    public let uuid: UUID
+    public let major: BeaconMajorIdentifier
+    
+    public init(uuid: UUID, major: BeaconMajorIdentifier) {
+        self.uuid = uuid
+        self.major = major
+    }
 }
 
 
@@ -65,24 +70,24 @@ public enum Region<L>: Hashable where L: Location, L: Hashable {
     case circle(L, Double)
     case beaconArea(BeaconIdentifier)
 
-    public func eraseToAnyRegion() -> Region<AnyLocation> {
-        switch self {
-        case .circle(let center, let radius):
-            let anyCenter = AnyLocation(
-                latitude: center.latitude,
-                longitude: center.longitude,
-                designation: center.designation
-            )
-            return Region<AnyLocation>.circle(anyCenter, radius)
-            
-        case .beaconArea(let identifier):
-            return Region<AnyLocation>.beaconArea(identifier)
-        }
-    }
-    
-    var erasedToAnyRegion: Region<AnyLocation> {
-        eraseToAnyRegion()
-    }
+//    public func eraseToAnyRegion() -> Region<AnyLocation> {
+//        switch self {
+//        case .circle(let center, let radius):
+//            let anyCenter = AnyLocation(
+//                latitude: center.latitude,
+//                longitude: center.longitude,
+//                designation: center.designation
+//            )
+//            return Region<AnyLocation>.circle(anyCenter, radius)
+//            
+//        case .beaconArea(let identifier):
+//            return Region<AnyLocation>.beaconArea(identifier)
+//        }
+//    }
+//    
+//    var erasedToAnyRegion: Region<AnyLocation> {
+//        eraseToAnyRegion()
+//    }
 }
 
 
@@ -109,38 +114,38 @@ public protocol PositionPredicate: Identifiable {
     var id: String { get }
 }
 
-public struct AnyPositionPredicate: PositionPredicate, Hashable {
-    public let position: Position
-    public let region: Region<AnyLocation>
-    
-    public let activation: Activation
-
-    public init(_ position: Position, _ region: Region<AnyLocation>, _ activation: Activation = .whenInUse) {
-        self.position = position
-        self.region = region
-        self.activation = activation
-    }
-    
-    public static func == (lhs: AnyPositionPredicate, rhs: AnyPositionPredicate) -> Bool {
-        lhs.position == rhs.position && lhs.region == rhs.region
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(position)
-        hasher.combine(region)
-    }
-}
-
-public extension PositionPredicate {
-    func eraseToAnyPositionPredicate() -> AnyPositionPredicate {
-        let anyRegion = region.eraseToAnyRegion()
-        return AnyPositionPredicate(position, anyRegion, activation)
-    }
-    
-    var erasedToAnyPositionPredicate: AnyPositionPredicate {
-        eraseToAnyPositionPredicate()
-    }
-}
+//public struct AnyPositionPredicate: PositionPredicate, Hashable {
+//    public let position: Position
+//    public let region: Region<AnyLocation>
+//    
+//    public let activation: Activation
+//
+//    public init(_ position: Position, _ region: Region<AnyLocation>, _ activation: Activation = .whenInUse) {
+//        self.position = position
+//        self.region = region
+//        self.activation = activation
+//    }
+//    
+//    public static func == (lhs: AnyPositionPredicate, rhs: AnyPositionPredicate) -> Bool {
+//        lhs.position == rhs.position && lhs.region == rhs.region
+//    }
+//    
+//    public func hash(into hasher: inout Hasher) {
+//        hasher.combine(position)
+//        hasher.combine(region)
+//    }
+//}
+//
+//public extension PositionPredicate {
+//    func eraseToAnyPositionPredicate() -> AnyPositionPredicate {
+//        let anyRegion = region.eraseToAnyRegion()
+//        return AnyPositionPredicate(position, anyRegion, activation)
+//    }
+//    
+//    var erasedToAnyPositionPredicate: AnyPositionPredicate {
+//        eraseToAnyPositionPredicate()
+//    }
+//}
 
 
 public enum NotificationSound: Hashable {
