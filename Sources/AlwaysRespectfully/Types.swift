@@ -143,23 +143,6 @@ public extension PositionPredicate {
 }
 
 
-//public enum RegionCrossing<T>: Equatable where T: PositionPredicate, T: Equatable {
-//    case identical(T)
-//    case opposite(T)
-//}
-//
-//extension RegionCrossing {
-//    static func comparePredicates<T, U>(predicateA: T, predicateB: U) -> RegionCrossing<T>
-//        where T: PositionPredicate, T: Equatable, U: PositionPredicate, U: Equatable  {
-//
-//        switch (predicateA.position, predicateB.position) {
-//        case (.inside, .inside), (.outside, .outside): return .identical(predicateA)
-//        case (.inside, .outside), (.outside, .inside): return .opposite(predicateA)
-//        }
-//    }
-//}
-
-
 public enum NotificationSound: Hashable {
     case `default`
     case named(String)
@@ -173,19 +156,74 @@ public protocol NotificationPresentation {
 }
 
 
-//public struct AnyPresentablePredicate: PositionPredicate, NotificationPresentation, Hashable {
-//    public let position: Position
-//    public let region: Region<AnyLocation>
-//    public let localizedTitleKey: String
-//    public let localizedBodyKey: String
-//    public let sound = NotificationSound.default
-//    
-//    public init(_ position: Position, _ region: Region<AnyLocation>, titleKey: String, bodyKey: String) {
-//        self.position = position
-//        self.region = region
-//        self.localizedTitleKey = titleKey
-//        self.localizedBodyKey = bodyKey
-//    }
-//}
+extension Location {
+    public var description: String {
+        switch designation {
+        case .unknown: return "(\(latitude), \(longitude))"
+        case .name(let name): return name
+        }
+    }
+}
+
+
+extension BeaconIdentifier {
+    public var description: String {
+        switch (major) {
+            
+        case .major(let major, let minor):
+            switch minor {
+            case .minor(let minor): return "\(uuid)-\(major)-\(minor)"
+            case .any: return "\(uuid)-\(major)-*"
+            }
+            
+        case .any: return "\(uuid)-*-*"
+        }
+    }
+}
+
+
+extension Region {
+    public var description: String {
+        switch self {
+        case .circle(let center, let radius): return "(\(center.description), \(radius))"
+        case .beaconArea(let beaconIdentifier): return beaconIdentifier.description
+        }
+    }
+}
+
+
+extension Position {
+    public var description: String {
+        switch self {
+        case .inside: return "inside"
+        case .outside: return "outside"
+        }
+    }
+}
+
+
+extension Activation {
+    public var description: String {
+        switch self {
+        case .whenInUse: return "whenInUse"
+        case .always: return "always"
+        }
+    }
+}
+
+
+extension PositionPredicate {
+    public var description: String {
+        "\(position.description) \(region.description)"
+    }
+}
+
+
+extension PositionPredicate {
+    public var id: String {
+        description
+    }
+}
+
 
 
