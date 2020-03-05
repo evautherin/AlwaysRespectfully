@@ -15,12 +15,12 @@ public protocol RegionStore {
 
     var storedRegions: Set<NativeRegion> { get }
     
-    func add<Predicate>(regions: [Region<Predicate.L>], _: Predicate.Type) -> AnyPublisher<Void, Error> where Predicate: PositionPredicate
+    func add<Predicate>(regions: [Region<Predicate.L>], _: Predicate.Type) -> AnyPublisher<Void, Error>
+        where Predicate: PositionPredicate
     func remove(regions: [NativeRegion])
     
     var insideRegionPublisher: AnyPublisher<NativeRegion, Never>  { get }
     var outsideRegionPublisher: AnyPublisher<NativeRegion, Never>  { get }
-    // Publishers.Merge(delegate.didEnterRegionSubject, delegate.insideRegionSubject)
 }
 
 
