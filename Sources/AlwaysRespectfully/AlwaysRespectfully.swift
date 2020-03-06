@@ -64,7 +64,7 @@ public struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore> {
 
 
 #if DEBUG
-extension AlwaysRespectfully.PredicateState: CustomDebugStringConvertible {
-    var debugDescription: String { description }
+extension PredicateState: CustomDebugStringConvertible {
+    public var debugDescription: String { description }
 }
 #endif
