@@ -34,29 +34,6 @@ public struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore> {
     }
 
 
-    enum PredicateState {
-        case opposite
-        case identical
-
-        init(isIdentical: Bool) {
-            self = isIdentical ? .identical : .opposite
-        }
-        
-        var isIdentical: Bool { self == .identical }
-
-        static func comparing(_ position: Position, _ otherPosition: Position) -> PredicateState {
-            PredicateState(isIdentical: position == otherPosition)
-        }
-
-        var description: String {
-            switch (self) {
-            case .opposite: return "opposite"
-            case .identical: return "identical"
-            }
-        }
-    }
-
-
     func privateMonitor<Predicate>(
         _ diffing: Diffing,
         predicates: Set<Predicate>

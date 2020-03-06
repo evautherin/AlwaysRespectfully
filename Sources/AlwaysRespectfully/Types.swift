@@ -74,6 +74,32 @@ public protocol PositionPredicate: Identifiable {
 }
 
 
+public enum PredicateState {
+    case opposite
+    case identical
+
+    public init(isIdentical: Bool) {
+        self = isIdentical ? .identical : .opposite
+    }
+    
+    public var isIdentical: Bool { self == .identical }
+
+    public static func comparing(_ position: Position, _ otherPosition: Position) -> PredicateState {
+        PredicateState(isIdentical: position == otherPosition)
+    }
+
+    public var description: String {
+        switch (self) {
+        case .opposite: return "opposite"
+        case .identical: return "identical"
+        }
+    }
+}
+
+
+
+
+
 public enum NotificationSound: Hashable {
     case `default`
     case named(String)
