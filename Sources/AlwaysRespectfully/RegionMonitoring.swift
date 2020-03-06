@@ -107,7 +107,7 @@ extension AlwaysRespectfully {
         }
 
         
-        var applyRegionChanges: AnyPublisher<Void, Error> {
+        var synchronizeRegions: AnyPublisher<Void, Error> {
             let (addedRegions, removedRegions) = regionsDifference
 
             regions.remove(regions: removedRegions)
@@ -117,7 +117,7 @@ extension AlwaysRespectfully {
         
         return positionChangePublishers
             .setFailureType(to: Error.self)
-            .combineLatest(applyRegionChanges)
+            .combineLatest(synchronizeRegions)
             .map(\.0)
             .eraseToAnyPublisher()
     }

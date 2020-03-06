@@ -14,7 +14,7 @@ public class ObservablePredicateState: ObservableObject, Identifiable {
     @Published public var state
 
     public enum Action {
-        case set(state: PredicateState)
+        case setState(PredicateState)
     }
     public let actions = PassthroughSubject<Action, Never>()
     public var subscriptions = Set<AnyCancellable>()
@@ -36,7 +36,7 @@ public class ObservablePredicateState: ObservableObject, Identifiable {
 
 
     public func sendAction(state: PredicateState) {
-        actions.send(.set(state: state))
+        actions.send(.setState(state))
     }
 
 
@@ -50,7 +50,7 @@ public class ObservablePredicateState: ObservableObject, Identifiable {
 
     public func reducer(action: Action) {
         switch action {
-        case .setState(let state): self.state = state
+        case .setState(let newState): state = newState
         }
     }
     

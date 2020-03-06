@@ -61,7 +61,7 @@ extension AlwaysRespectfully {
         }
 
         
-        func applyChanges(
+        func synchronize(
             addedPredicates: [Predicate],
             removedPredicates: [N.NativePredicate]
         ) -> AnyPublisher<Void, Error> {
@@ -74,7 +74,7 @@ extension AlwaysRespectfully {
         
         return predicatesDifference
             .setFailureType(to: Error.self)
-            .flatMap(applyChanges)
+            .flatMap(synchronize)
             .eraseToAnyPublisher()
     }
 
