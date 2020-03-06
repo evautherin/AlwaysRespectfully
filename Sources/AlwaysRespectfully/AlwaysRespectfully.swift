@@ -34,7 +34,7 @@ public struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore> {
     }
 
 
-    enum Direction {
+    enum PredicateState {
         case opposite
         case identical
 
@@ -44,8 +44,8 @@ public struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore> {
         
         var isIdentical: Bool { self == .identical }
 
-        static func comparing(_ position: Position, _ otherPosition: Position) -> Direction {
-            Direction(isIdentical: position == otherPosition)
+        static func comparing(_ position: Position, _ otherPosition: Position) -> PredicateState {
+            PredicateState(isIdentical: position == otherPosition)
         }
 
         var description: String {
@@ -62,32 +62,32 @@ public struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore> {
         predicates: Set<Predicate>
     ) -> AnyPublisher<Predicate, Error> where Predicate: Hashable, Predicate: PositionPredicate {
         
-        func adjustNotifcationMasking(predicate: Predicate, direction: Direction) {
-            log.debug("adjustNotifcationMasking \(direction.description) \(predicate.description)")
+        func adjustNotifcationMasking(predicate: Predicate, state: PredicateState) {
+            log.debug("adjustNotifcationMasking \(state.description) \(predicate.description)")
             let identifiers = [predicate.id]
             
-            switch direction {
+            switch state {
             case .identical: notifications.mask(predicateIdentifiers: identifiers)
             case .opposite: notifications.unmask(predicateIdentifiers: identifiers)
             }
         }
         
-        func identicalDirection(predicate: Predicate, direction: Direction) -> Predicate? {
-            direction.isIdentical ? predicate : .none
+        func identicalState(predicate: Predicate, state: PredicateState) -> Predicate? {
+            state.isIdentical ? predicate : .none
         }
         
         return monitorRegions(diffing, predicates: predicates)
             .handleEvents(receiveOutput: adjustNotifcationMasking)
             .combineLatest(setNotifications(diffing, predicates: predicates))
             .map(\.0)
-            .compactMap(identicalDirection)
+            .compactMap(identicalState)
             .logDebug(".predicates monitoring")
     }
 }
 
 
 #if DEBUG
-extension AlwaysRespectfully.Direction: CustomDebugStringConvertible {
+extension AlwaysRespectfully.PredicateState: CustomDebugStringConvertible {
     var debugDescription: String { description }
 }
 #endif

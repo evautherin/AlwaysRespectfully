@@ -34,9 +34,9 @@ extension AlwaysRespectfully {
     func monitorRegions<Predicate>(
         _ diffing: Diffing,
         predicates: Set<Predicate>
-    ) -> AnyPublisher<(Predicate, Direction), Error> where Predicate: PositionPredicate, Predicate: Hashable {
+    ) -> AnyPublisher<(Predicate, PredicateState), Error> where Predicate: PositionPredicate, Predicate: Hashable {
 
-        func positionChangePublisher(predicate: Predicate) -> AnyPublisher<(Predicate, Direction), Never> {
+        func stateChangePublisher(predicate: Predicate) -> AnyPublisher<(Predicate, PredicateState), Never> {
                         
             func predicateMatching(position: Position) -> (R.NativeRegion) -> Position? {
                 return { (nativeRegion) -> Position? in
@@ -55,16 +55,16 @@ extension AlwaysRespectfully {
                 .compactMap(outsideWhenPredicateMatches)
                 .logDebug(".outside")
 
-            func predicateDirection(position: Position) -> (Predicate, Direction) {
-                (predicate, Direction.comparing(predicate.position, position))
+            func predicateState(position: Position) -> (Predicate, PredicateState) {
+                (predicate, PredicateState.comparing(predicate.position, position))
             }
             
             return Publishers.Merge(inside, outside)
                 .removeDuplicates()
-                .map(predicateDirection)
+                .map(predicateState)
                 .logDebug(".positionChangePublisher")
         }
-        let positionChangePublishers = Publishers.MergeMany(predicates.map(positionChangePublisher))
+        let positionChangePublishers = Publishers.MergeMany(predicates.map(stateChangePublisher))
         
         
         var regionsDifference: (added: [Region<Predicate.L>], removed: [R.NativeRegion]) {
