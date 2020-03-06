@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import Combine
 
 
 public class ObservablePredicateState: ObservableObject, Identifiable {
-    let id: String
+    public let id: String
     
-    @Published public var state
+    @Published public var state: PredicateState
 
     public enum Action {
         case setState(PredicateState)
