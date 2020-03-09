@@ -97,6 +97,11 @@ public enum PredicateState {
 }
 
 
+public protocol AbstractlyEquatable {
+    associatedtype Abstraction
+    
+    func isEqual(to: Abstraction) -> Bool
+}
 
 
 

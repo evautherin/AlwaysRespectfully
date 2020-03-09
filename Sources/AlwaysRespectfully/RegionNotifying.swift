@@ -10,10 +10,10 @@ import Combine
 
 
 extension AlwaysRespectfully {
-    func setNotifications<Predicate>(
+    func setNotifications(
         _ diffing: Diffing,
         predicates: Set<Predicate>
-    ) -> AnyPublisher<Void, Error> where Predicate: PositionPredicate, Predicate: Hashable {
+    ) -> AnyPublisher<Void, Error> {
 
         var predicatesDifference: AnyPublisher<(added: [Predicate], removed: [N.NativePredicate]), Never> {
             
