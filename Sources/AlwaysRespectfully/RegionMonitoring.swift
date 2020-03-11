@@ -31,10 +31,10 @@ import AnyLogger
 
 
 extension AlwaysRespectfully {
-    func monitorRegions<Predicate>(
+    func monitorRegions(
         _ diffing: Diffing,
         predicates: Set<Predicate>
-    ) -> AnyPublisher<(Predicate, PredicateState), Error> where Predicate: PositionPredicate, Predicate: Hashable {
+    ) -> AnyPublisher<(Predicate, PredicateState), Error> {
 
         func stateChangePublisher(predicate: Predicate) -> AnyPublisher<(Predicate, PredicateState), Never> {
                         
@@ -67,26 +67,26 @@ extension AlwaysRespectfully {
         let positionChangePublishers = Publishers.MergeMany(predicates.map(stateChangePublisher))
         
         
-        var regionsDifference: (added: [Region<Predicate.L>], removed: [R.NativeRegion]) {
+        var regionsDifference: (added: [Region], removed: [R.NativeRegion]) {
                 
             let predicateRegions = predicates.map(\.region)
             let nativeRegions = regions.storedRegions
 
             func notContainedByRegions(nativeRegion: R.NativeRegion) -> Bool {
-                func isEqual(predicate: Region<Predicate.L>) -> Bool {
+                func isEqual(predicate: Region) -> Bool {
                     nativeRegion.isEqual(to: predicate)
                 }
                 return predicateRegions.firstIndex(where: isEqual) == .none
             }
             
-            func notContainedByNativeRegions(predicate: Region<Predicate.L>) -> Bool {
+            func notContainedByNativeRegions(predicate: Region) -> Bool {
                 func isEqual(nativeRegion: R.NativeRegion) -> Bool {
                     nativeRegion.isEqual(to: predicate)
                 }
                 return nativeRegions.firstIndex(where: isEqual) == .none
             }
 
-            var regionsSubtractingNativeRegions: [Region<Predicate.L>] {
+            var regionsSubtractingNativeRegions: [Region] {
                 predicateRegions.filter(notContainedByNativeRegions)
             }
 

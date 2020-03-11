@@ -27,10 +27,9 @@ struct WhenLocation: Hashable, Location {
 
 
 struct When: Hashable, PositionPredicate {
-    typealias L = WhenLocation
 
     let position: Position
-    let region: Region<L>
+    let region: Region
     let activation: Activation
     let id: String
     

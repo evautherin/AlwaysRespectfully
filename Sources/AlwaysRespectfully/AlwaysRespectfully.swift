@@ -10,10 +10,10 @@ import Combine
 import AnyLogger
 
 
-public struct AlwaysRespectfully<R: RegionStore, N: PositionPredicateStore>
-    where N.NativePredicate.Abstraction: Hashable, N.NativePredicate.Abstraction: PositionPredicate {
+public struct AlwaysRespectfully<Predicate: PositionPredicate, R: RegionStore, N: PositionPredicateStore>
+where Predicate: Hashable { // N.NativePredicate.Abstraction: Hashable { // }, N.NativePredicate.Abstraction: PositionPredicate {
     
-    public typealias Predicate = N.NativePredicate.Abstraction
+//    public typealias Predicate = N.NativePredicate.Abstraction
     
     public let regions: R
     public let notifications: N

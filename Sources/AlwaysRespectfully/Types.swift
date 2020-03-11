@@ -9,7 +9,7 @@
 import Foundation
 
 
-public enum Designation {
+public enum Designation: Hashable {
     case unknown
     case name(String)
 }
@@ -44,8 +44,14 @@ public struct BeaconIdentifier: Hashable {
 }
 
 
-public enum Region<L>: Hashable where L: Location, L: Hashable {
-    case circle(L, Double)
+//public enum Region<L>: Hashable where L: Location, L: Hashable {
+//    case circle(L, Double)
+//    case beaconArea(BeaconIdentifier)
+//}
+
+
+public enum Region: Hashable {
+    case circle(Double, Double, Double, Designation)
     case beaconArea(BeaconIdentifier)
 }
 
@@ -63,10 +69,10 @@ public enum Activation {
 
 
 public protocol PositionPredicate: Identifiable {
-    associatedtype L: Location, Hashable
+//    associatedtype L: Location, Hashable
     
     var position: Position { get }
-    var region: Region<L> { get }
+    var region: Region { get }
     
     var activation: Activation { get }
     
@@ -95,14 +101,6 @@ public enum PredicateState {
         }
     }
 }
-
-
-public protocol AbstractlyEquatable {
-    associatedtype Abstraction
-    
-    func isEqual(to: Abstraction) -> Bool
-}
-
 
 
 public enum NotificationSound: Hashable {
@@ -147,7 +145,11 @@ extension BeaconIdentifier {
 extension Region {
     public var description: String {
         switch self {
-        case .circle(let center, let radius): return "(\(center.description), \(radius))"
+        case .circle(let latitude, let longitude, let radius, let designation):
+            switch designation {
+            case .unknown: return "(\(latitude), \(longitude), \(radius))"
+            case .name(let name): return "\(name)"
+            }
         case .beaconArea(let beaconIdentifier): return beaconIdentifier.description
         }
     }

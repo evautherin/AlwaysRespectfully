@@ -10,12 +10,11 @@ import Combine
 
 
 public protocol RegionStore {
-    associatedtype L: Location, Hashable
     associatedtype NativeRegion: Hashable, RegionEquatable
 
     var storedRegions: Set<NativeRegion> { get }
     
-    func add<Predicate>(regions: [Region<Predicate.L>], _: Predicate.Type) -> AnyPublisher<Void, Error>
+    func add<Predicate>(regions: [Region], _: Predicate.Type) -> AnyPublisher<Void, Error>
         where Predicate: PositionPredicate
     func remove(regions: [NativeRegion])
     
@@ -25,5 +24,5 @@ public protocol RegionStore {
 
 
 public protocol RegionEquatable {
-    func isEqual<L>(to: Region<L>) -> Bool where L: Location
+    func isEqual(to: Region) -> Bool
 }
