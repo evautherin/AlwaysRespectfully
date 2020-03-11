@@ -1,5 +1,5 @@
 //
-//  ObservableModel.swift
+//  ObservablePredicateState.swift
 //  AlwaysRespectfully
 //
 //  Created by Etienne Vautherin on 06/03/2020.

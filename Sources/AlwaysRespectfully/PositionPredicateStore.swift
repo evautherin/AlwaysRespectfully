@@ -10,12 +10,12 @@ import Combine
 
 
 public protocol PositionPredicateStore {
+    associatedtype Predicate: PositionPredicate
     associatedtype NativePredicate: Hashable, Identifiable, AbstractlyEquatable
     
     var storedPredicates: Future<Set<NativePredicate>, Never> { get }
 
-    func add<Predicate>(predicates: [Predicate]) -> AnyPublisher<Void, Error>
-        where Predicate: PositionPredicate
+    func add<Predicate>(predicates: [Predicate]) -> AnyPublisher<Void, Error> // where Predicate: PositionPredicate
     func remove(predicateIdentifiers: [NativePredicate.ID])
     
     func mask(predicateIdentifiers: [String])
