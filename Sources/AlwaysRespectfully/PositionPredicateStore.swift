@@ -10,7 +10,7 @@ import Combine
 
 
 public protocol PositionPredicateStore {
-    associatedtype NativePredicate: Hashable, Identifiable
+    associatedtype NativePredicate: Hashable, Identifiable, PredicateEquatable
     
     var storedPredicates: Future<Set<NativePredicate>, Never> { get }
 
