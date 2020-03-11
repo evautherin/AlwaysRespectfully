@@ -14,8 +14,7 @@ public protocol RegionStore {
 
     var storedRegions: Set<NativeRegion> { get }
     
-    func add<Predicate>(regions: [Region], _: Predicate.Type) -> AnyPublisher<Void, Error>
-        where Predicate: PositionPredicate
+    func add(regions: [Region]) -> AnyPublisher<Void, Error>
     func remove(regions: [NativeRegion])
     
     var insideRegionPublisher: AnyPublisher<NativeRegion, Never>  { get }
