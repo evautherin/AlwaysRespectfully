@@ -26,15 +26,15 @@ struct WhenLocation: Hashable, Location {
 }
 
 
-struct When: Hashable, PositionPredicate {
+public struct When: Hashable, PositionPredicate {
 
-    let position: Position
-    let region: Region
-    let activation: Activation
-    let id: String
+    public let position: Position
+    public let region: Region
+    public let activation: Activation
+    public let id: String
     
     
-    static func == (lhs: When, rhs: When) -> Bool {
+    public static func == (lhs: When, rhs: When) -> Bool {
         lhs.position == rhs.position && lhs.region == rhs.region
     }
 
