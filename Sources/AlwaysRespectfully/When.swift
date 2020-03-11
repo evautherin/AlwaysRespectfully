@@ -10,38 +10,37 @@ import Foundation
 
 
 struct WhenLocation: Hashable, Location {
-    var latitude: Double
-    var longitude: Double
-    var designation: Designation
+    let latitude: Double
+    let longitude: Double
+    let designation: Designation
+    
     
     static func == (lhs: WhenLocation, rhs: WhenLocation) -> Bool {
-        #warning("Needs coding")
-        return true
+        lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
 
     public func hash(into hasher: inout Hasher) {
+        hasher.combine(latitude)
+        hasher.combine(longitude)
     }
-
 }
 
 
 struct When: Hashable, PositionPredicate {
     typealias L = WhenLocation
 
-    var position: Position
-    var region: Region<L>
-    
-    var activation: Activation
-    
-    var id: String
+    let position: Position
+    let region: Region<L>
+    let activation: Activation
+    let id: String
     
     
     static func == (lhs: When, rhs: When) -> Bool {
-        #warning("Needs coding")
-        return true
+        lhs.position == rhs.position && lhs.region == rhs.region
     }
 
     public func hash(into hasher: inout Hasher) {
+        hasher.combine(position)
+        hasher.combine(region)
     }
-
 }
