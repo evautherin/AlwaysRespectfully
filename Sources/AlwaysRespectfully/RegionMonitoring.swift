@@ -111,7 +111,7 @@ extension AlwaysRespectfully {
             let (addedRegions, removedRegions) = regionsDifference
 
             regions.remove(regions: removedRegions)
-            return regions.add(regions: addedRegions, Predicate.self)
+            return regions.add(regions: addedRegions)
         }
 
         
