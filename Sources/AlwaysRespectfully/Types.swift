@@ -14,11 +14,11 @@ public enum Designation: Hashable {
     case name(String)
 }
 
-public protocol Location {
-    var latitude: Double { get }
-    var longitude: Double { get }
-    var designation: Designation { get }
-}
+//public protocol Location {
+//    var latitude: Double { get }
+//    var longitude: Double { get }
+//    var designation: Designation { get }
+//}
 
 
 public enum BeaconMinorIdentifier: Hashable {
@@ -116,14 +116,14 @@ public protocol NotificationPresentation {
 }
 
 
-extension Location {
-    public var description: String {
-        switch designation {
-        case .unknown: return "(\(latitude), \(longitude))"
-        case .name(let name): return name
-        }
-    }
-}
+//extension Location {
+//    public var description: String {
+//        switch designation {
+//        case .unknown: return "(\(latitude), \(longitude))"
+//        case .name(let name): return name
+//        }
+//    }
+//}
 
 
 extension BeaconIdentifier {
@@ -184,9 +184,7 @@ extension PositionPredicate {
 
 
 extension PositionPredicate {
-    public var id: String {
-        description
-    }
+    public var id: String { description }
 }
 
 
