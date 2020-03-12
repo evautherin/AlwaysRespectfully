@@ -9,21 +9,21 @@
 import Foundation
 
 
-struct WhenLocation: Hashable, Location {
-    let latitude: Double
-    let longitude: Double
-    let designation: Designation
-    
-    
-    static func == (lhs: WhenLocation, rhs: WhenLocation) -> Bool {
-        lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(latitude)
-        hasher.combine(longitude)
-    }
-}
+//struct WhenLocation: Hashable, Location {
+//    let latitude: Double
+//    let longitude: Double
+//    let designation: Designation
+//
+//
+//    static func == (lhs: WhenLocation, rhs: WhenLocation) -> Bool {
+//        lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+//    }
+//
+//    public func hash(into hasher: inout Hasher) {
+//        hasher.combine(latitude)
+//        hasher.combine(longitude)
+//    }
+//}
 
 
 public struct When: Hashable, PositionPredicate {
